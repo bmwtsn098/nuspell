@@ -17,14 +17,17 @@ RUN cmake ..
 RUN make
 RUN make install
 WORKDIR /nuspell/build/src/nuspell
-RUN cp libnuspell.so /usr/local/lib
-RUN cp libnuspell.so.5 /usr/local/lib
-RUN cp libnuspell.so.5.1.0 /usr/local/lib
-ENV LD_LIBRARY_PATH=/usr/local/lib
 RUN wget -O en_US.aff https://cgit.freedesktop.org/libreoffice/dictionaries/plain/en/en_US.aff?id=a4473e06b56bfe35187e302754f6baaa8d75e54f
 RUN wget -O en_US.dic https://cgit.freedesktop.org/libreoffice/dictionaries/plain/en/en_US.dic?id=a4473e06b56bfe35187e302754f6baaa8d75e54f
 
 
 # Package Stage
-#FROM --platform=linux/amd64 ubuntu:20.04
-#COPY --from=builder /fuzzme /
+FROM debian:bullseye-slim
+COPY --from=builder /nuspell/build/src/nuspell/nuspell /
+COPY --from-builder /nuspell/build/src/nuspell/libnuspell.so /usr/local/lib
+COPY --from-builder /nuspell/build/src/nuspell/libnuspell.so.5 /usr/local/lib
+COPY --from-builder /nuspell/build/src/nuspell/libnuspell.so.5.1.0 /usr/local/lib
+COPY --from-builder /nuspell/build/src/nuspell/en_US.aff /
+COPY --from-builder /nuspell/build/src/nuspell/en_US.dic /
+ENV LD_LIBRARY_PATH=/usr/local/lib
+
