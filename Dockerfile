@@ -1,5 +1,5 @@
 # Build Stage:
-FROM --platform=linux/amd64 ubuntu:20.04 as builder
+FROM --platform=linux/amd64 debian:bookworm as builder
 
 ## Install build dependencies.
 RUN apt-get update && \
@@ -26,7 +26,9 @@ FROM debian:bullseye-slim
 COPY --from=builder /nuspell/build/src/nuspell/libnuspell.so /usr/local/lib
 COPY --from=builder /nuspell/build/src/nuspell/libnuspell.so.5 /usr/local/lib
 COPY --from=builder /nuspell/build/src/nuspell/libnuspell.so.5.1.0 /usr/local/lib
+COPY --from=builder /usr/local/bin/nuspell /usr/local/bin
 COPY --from=builder /nuspell/build/src/nuspell/en_US.aff /
 COPY --from=builder /nuspell/build/src/nuspell/en_US.dic /
 ENV LD_LIBRARY_PATH=/usr/local/lib
+RUN apt-get update && apt-get install -y libicu71
 
