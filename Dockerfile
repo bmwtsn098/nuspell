@@ -24,10 +24,10 @@ RUN wget -O en_US.dic https://cgit.freedesktop.org/libreoffice/dictionaries/plai
 # Package Stage
 FROM debian:bullseye-slim
 COPY --from=builder /nuspell/build/src/nuspell/nuspell /
-COPY --from-builder /nuspell/build/src/nuspell/libnuspell.so /usr/local/lib
-COPY --from-builder /nuspell/build/src/nuspell/libnuspell.so.5 /usr/local/lib
-COPY --from-builder /nuspell/build/src/nuspell/libnuspell.so.5.1.0 /usr/local/lib
-COPY --from-builder /nuspell/build/src/nuspell/en_US.aff /
-COPY --from-builder /nuspell/build/src/nuspell/en_US.dic /
+COPY --from=builder /nuspell/build/src/nuspell/libnuspell.so /usr/local/lib
+COPY --from=builder /nuspell/build/src/nuspell/libnuspell.so.5 /usr/local/lib
+COPY --from=builder /nuspell/build/src/nuspell/libnuspell.so.5.1.0 /usr/local/lib
+COPY --from=builder /nuspell/build/src/nuspell/en_US.aff /
+COPY --from=builder /nuspell/build/src/nuspell/en_US.dic /
 ENV LD_LIBRARY_PATH=/usr/local/lib
 
